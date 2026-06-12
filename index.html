@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Warehouse - Login</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <div class="card">
+      <h1 class="title">Warehouse Gudang</h1>
+      <p class="muted">Silakan login untuk masuk dashboard.</p>
+
+      <form id="loginForm" class="stack" autocomplete="off">
+        <label class="field">
+          <span>Username</span>
+          <input id="username" type="text" required placeholder="contoh: admin" />
+        </label>
+
+        <label class="field">
+          <span>Password</span>
+          <input id="password" type="password" required placeholder="contoh: admin123" />
+        </label>
+
+        <div class="row">
+          <button class="btn primary" type="submit">Login</button>
+          <button class="btn" type="button" id="btnGoDemo">Masuk Cepat</button>
+        </div>
+
+        <div id="loginMsg" class="msg" role="status" aria-live="polite"></div>
+      </form>
+
+      <hr class="divider" />
+
+      <p class="small muted">
+        Akun default (untuk testing): <br/>
+        <b>admin</b> / <b>admin123</b>
+      </p>
+    </div>
+  </main>
+
+  <script src="./assets/app.js"></script>
+  <script>
+    (function () {
+      const form = document.getElementById('loginForm');
+      const msg = document.getElementById('loginMsg');
+      const usernameEl = document.getElementById('username');
+      const passwordEl = document.getElementById('password');
+      const btnGoDemo = document.getElementById('btnGoDemo');
+
+      const DEFAULT_USER = { username: 'admin', password: 'admin123' };
+      const TOKEN_KEY = 'warehouse_auth_token';
+      const USER_KEY = 'warehouse_user';
+
+      function setMsg(text, type) {
+        msg.textContent = text;
+        msg.className = 'msg ' + (type ? 'msg-' + type : '');
+      }
+
+      function saveUser(username) {
+        localStorage.setItem(USER_KEY, JSON.stringify({ username, createdAt: Date.now() }));
+      }
+
+      function login(username, password) {
+        const ok = username === DEFAULT_USER.username && password === DEFAULT_USER.password;
+        if (!ok) {
+          setMsg('Username atau password salah.', 'error');
+          return;
+        }
+        const token = 'token_' + Math.random().toString(16).slice(2);
+        localStorage.setItem(TOKEN_KEY, token);
+        saveUser(username);
+        window.location.href = './dashboard.html';
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        setMsg('', '');
+        login(usernameEl.value.trim(), passwordEl.value);
+      });
+
+      btnGoDemo.addEventListener('click', () => {
+        usernameEl.value = DEFAULT_USER.username;
+        passwordEl.value = DEFAULT_USER.password;
+        login(DEFAULT_USER.username, DEFAULT_USER.password);
+      });
+
+      // Jika sudah login, langsung ke dashboard
+      const token = localStorage.getItem(TOKEN_KEY);
+      if (token) window.location.href = './dashboard.html';
+    })();
+  </script>
+</body>
+</html>
+
