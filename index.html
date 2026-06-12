@@ -49,11 +49,11 @@
       const passwordEl = document.getElementById('password');
       const btnGoDemo = document.getElementById('btnGoDemo');
 
-      const DEFAULT_USER = { username: 'admin', password: 'admin123' };
-      const TOKEN_KEY = 'warehouse_auth_token';
-      const USER_KEY = 'warehouse_user';
-
-      const DEFAULT_USER = { username: 'staff', password: '123' };
+      const DEFAULT_USERS = [
+        { username: 'admin', password: 'admin123' },
+        // contoh staff tambahan
+        { username: 'staff', password: '123' }
+      ];
       const TOKEN_KEY = 'warehouse_auth_token';
       const USER_KEY = 'warehouse_user';
 
